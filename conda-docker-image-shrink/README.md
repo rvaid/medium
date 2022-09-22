@@ -2,7 +2,7 @@ This project contains dockerfiles to build docker images consisting of conda bas
 
 **Dockerfile-original**  - here image will have both environment as well as conda package manager installed.
 
-**Dockerfile-shrink** - here image will have only environment installed. The size of the image is almots 60% lesser than that of the above image.
+**Dockerfile-shrink** - here image will have only environment installed. The size of the image is almost 60% lesser than that of the above image.
 
 To build an image use the following command:
 
