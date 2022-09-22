@@ -1,0 +1,8 @@
+name: test
+channels:
+  - defaults
+dependencies:
+  - python=3.9.12
+  - pip=22.1.2
+  - pip:
+    - boto3==1.24.78

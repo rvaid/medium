@@ -1,0 +1,10 @@
+FROM continuumio/miniconda3:4.12.0
+
+COPY environment.yml .
+RUN conda env create -f environment.yml
+
+# To test if the image has boto3 properly installed
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT source /opt/conda/etc/profile.d/conda.sh &&\
+           conda activate test && \
+           python -c "import boto3; print(boto3.__version__)"

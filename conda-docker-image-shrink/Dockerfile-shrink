@@ -1,0 +1,34 @@
+# Environment build stage
+
+# Using miniconda image to build the required image
+FROM continuumio/miniconda3:4.12.0 AS build
+# Install conda-pack
+RUN conda install -c conda-forge conda-pack
+
+
+# Create the conda environment using environment.yml file
+COPY environment.yml .
+RUN conda env create -f environment.yml
+
+
+# Package the environment as tar using conda-pack
+RUN conda-pack -n test -o /tmp/env.tar && \
+  mkdir /venv && cd /venv && tar -xf /tmp/env.tar && \
+  rm /tmp/env.tar
+
+# Unpack the environment in /venv using conda-unpack
+RUN /venv/bin/conda-unpack
+
+
+# Runtime stage
+
+# using slim debian image as the base image for the environment
+FROM debian:bullseye-slim AS runtime
+
+# Copy the environment directory /venv from the build stage:
+COPY --from=build /venv /venv
+
+# To test if the image has boto3 properly installed
+SHELL ["/bin/bash", "-c"]
+ENTRYPOINT source /venv/bin/activate && \
+           python -c "import boto3; print(boto3.__version__)"
